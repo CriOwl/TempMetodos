@@ -1,46 +1,53 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Scanner;
+import java.io.*;
+import java.nio.file.*;
 
 public class App {
-    
-    public static void main(String[] args) throws Exception {
-        try {
-            File file= new File("/home/criowl/Criowl/RigelSirius/train-metadata.csv");
-            FileWriter writer = new FileWriter("/home/criowl/Criowl/RigelSirius/processed_data.csv");
-            Scanner scanner = new Scanner(file);
-            String line = scanner.nextLine();
-                String[] values = line.split(",");
-                writer.write(values[1]+","+values[6]+","+values[19]+","+values[20]+","+values[21]+","+values[26]+","+values[30]+","+values[32]+","+values[38]+","+values[39]+"\n");
-                int i=0;
-            while (scanner.hasNextLine()) { 
+
+    public static void main(String[] args) {
+        Path input = Paths.get("/home/criowl/Criowl/RigelSirius/train-metadata.csv");
+        Path output = Paths.get("/home/criowl/Criowl/RigelSirius/processed_data.csv");
+
+        try (
+            BufferedReader br = Files.newBufferedReader(input);
+            BufferedWriter bw = Files.newBufferedWriter(output)
+        ) {
+
+            // Leer cabecera
+            String line = br.readLine();
+            String[] values = line.split(",");
+
+            bw.write(values[1] + "," + values[6] + "," + values[19] + "," +
+                     values[20] + "," + values[21] + "," + values[26] + "," +
+                     values[30] + "," + values[32] + "," + values[38] + "," +
+                     values[39]);
+            bw.newLine();
+
+            int i = 0;
+            while ((line = br.readLine()) != null) {
                 i++;
-                System.out.println(i);
-                String line2 = scanner.nextLine();
-                String[] values2= line2.split(",");
-                if (values2[8].contains("3D: XP")) {
-                    writer.write(values2[1]+","+values2[6]+","+","+values2[19]+","+values2[20]+","+values2[21]+","+values2[26]+","+values2[30]+","+values2[32]+","+values2[38]+","+values2[39]+"\n");
-                } 
-            } 
-            writer.close();
-        } catch (Exception e) {
-            System.out.println(e);
+
+                // Mostrar progreso cada 100k líneas
+                if (i % 100_000 == 0) {
+                    System.out.println("Procesadas: " + i);
+                }
+
+                String[] v = line.split(",");
+
+                if (v.length > 39 && v[8].contains("3D: XP")) {
+                    bw.write(
+                        v[1] + "," + v[6] + "," +
+                        v[19] + "," + v[20] + "," + v[21] + "," +
+                        v[26] + "," + v[30] + "," + v[32] + "," +
+                        v[38] + "," + v[39]
+                    );
+                    bw.newLine();
+                }
+            }
+
+            System.out.println("Proceso finalizado. Total líneas: " + i);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        // 1 
-        /*
-        "target"----1
-        "clin_size_long_diam_mm"----6
-        "tbp_tile_type"----8
-        "tbp_lv_areaMM2"----19
-        "tbp_lv_area_perim_ratio"----20
-        "tbp_lv_color_std_mean"----21
-        "tbp_lv_deltaLBnorm"----26
-        "tbp_lv_minorAxisMM"----30
-        "tbp_lv_norm_border"----32
-        "tbp_lv_symm_2axis"----38
-        "tbp_lv_symm_2axis_angle"----39
-        */
-        
-        
     }
 }
