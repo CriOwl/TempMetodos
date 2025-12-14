@@ -1,16 +1,36 @@
 import csv
 import  math
 import  numpy  as  np
+
 filtradoFile = "../../processed_data.csv"
 NormalizadoFile = "../../normal_Data.csv"
 maxValores=list()
 minValores=list()
 valoresColumnas=list()
+
 def normalizar(x, xmax, xmin):
+    """
+    Docstring for normalizar
+    Aplicamos normalizacion Min-Max a un valor escalar
+
+    :param x: valor original
+    :param xmax: Valor maximo de la columna
+    :param xmin: Valor minimo de la columna
+    """
     if xmax == xmin:
         return 0.0
     return (x - xmin) / (xmax - xmin)
+
 def normalizarArchivo():
+    """
+    Docstring for normalizarArchivo
+    Normalizamos todas las columnas de un archivo CSV utilizando
+    el metodo Min-Max y guardamos el resultado en otro archivo CSV
+
+    El procedimiento se divide en dos fases:
+    1. Calculo de valores maximos y minimos por columna
+    2. Generacion del archivo normalizado
+    """
     global maxValores
     global minValores
     global filtradoFile
@@ -40,6 +60,7 @@ def normalizarArchivo():
                 v = float(fila[i])
                 salida.append(normalizar(v, maxValores[i], minValores[i]))
             writer.writerow(salida)
+
 def agregarVColumnas():
     global valoresColumnas
     with open(NormalizadoFile, newline="") as f_in:
@@ -52,6 +73,7 @@ def agregarVColumnas():
                 valoresColumnas[i].append(float(valor))
 normalizarArchivo()
 agregarVColumnas()
+
 def pearson(x, y):
     """
     Pearson
