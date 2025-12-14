@@ -23,8 +23,8 @@ def multiplicar_matrices(matriz_a, matriz_b):
     """
     Realizamos la multiplicacion entre dos matrices que sean compatibles
     
-    :param matriz_a: Matriz A de tamano m x n
-    :param matriz_b: Matriz B de tamano n x p
+    :param matriz_a: Matriz A de tamano m x n 
+    :param matriz_b: Matriz B de tamano n x p 
 
     Retorna: Matriz resultante C de tamano m x p
 
@@ -163,7 +163,6 @@ def estimar_dataset(datos_indices, coeficientes):
 
 def error_cuadratico_medio(y_real, y_estimado):
     """
-    Docstring for error_cuadratico_medio
     Calculamos el error cuadratico Medio del modelo
 
     :param y_real: Valores reales
