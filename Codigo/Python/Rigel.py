@@ -1,6 +1,7 @@
 import csv
 import  math
 import  numpy  as  np
+import Multivariable as mv
 
 filtradoFile = "../../processed_data.csv"
 NormalizadoFile = "../../normal_Data.csv"
@@ -72,7 +73,7 @@ def agregarVColumnas():
         for fila in reader:
             for i,valor in enumerate(fila):
                 valoresColumnas[i].append(float(valor))
-normalizarArchivo()
+#normalizarArchivo()
 agregarVColumnas()
 
 def pearson(x, y):
@@ -263,8 +264,10 @@ matrizTemp.append(valoresColumnas[3])
 matrizTemp.append(valoresColumnas[7])
 indice_pcaBordes = PCA(matrizTemp)
 print("Bordes")
+matrizTemp=[indice_pcaBordes,indice_pcaAsimetria,indice_pcaDiametro,indice_pcaColor]
 
 # Investigar otra forma de obtener mejores valores de indice
+print(mv.ajuste_minimos_cuadrados(matrizTemp, target))
 
 # Multivariable
 #coeficientes = ajuste_minimos_cuadrados(datos_indices, target)
