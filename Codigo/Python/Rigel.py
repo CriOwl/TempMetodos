@@ -10,6 +10,7 @@ def normalizar(x, xmax, xmin):
     if xmax == xmin:
         return 0.0
     return (x - xmin) / (xmax - xmin)
+
 def normalizarArchivo():
     global maxValores
     global minValores
@@ -56,14 +57,11 @@ agregarVColumnas()
 
 # PCA
 
-def PCA():
-    global valoresColumnas
+def PCA(matriz):
 
-    X = np.array(valoresColumnas).T
+    X = np.array(matriz).T
 
-    X = X[:, 1:]
-
-    media_X = np.mean(X, axis=0)      
+    media_X = np.mean(X, axis=0)
     X_centrado = X - media_X
 
     #Para la matriz de covarianza
@@ -142,7 +140,7 @@ def imprimir_matriz(matriz, nombre="Matriz"):
 """
 Sistemas de Gauss-Jordan
 """
-
+# Comparar eficiencia de metodos
 def resolver_sistema_gauss(A, B):
     n = len(A)
     M = [A[i][:] + B[i][:] for i in range(n)]
@@ -201,14 +199,31 @@ def estimar(indices_entrada, coeficientes):
 
 target = valoresColumnas[0]
 
-indice_pca = PCA()
-print(indice_pca)
+indice_pcaColor = PCA(valoresColumnas[4:6])
+print(indice_pcaColor,"Color")
+indice_pcaAsimetria = PCA(valoresColumnas[8:])
+print(indice_pcaAsimetria,"Asimetria")
+#1///6
+matrizTemp2=[]
+matrizTemp2.append(valoresColumnas[1])
+matrizTemp2.append(valoresColumnas[6])
+indice_pcaDiametro = PCA(matrizTemp2)
+print(indice_pcaDiametro,"Diametro")
+# 2 -3 -6
+matrizTemp=[]
+matrizTemp.append(valoresColumnas[2])
+matrizTemp.append(valoresColumnas[3])
+matrizTemp.append(valoresColumnas[7])
+indice_pcaBordes = PCA(matrizTemp)
+print(indice_pcaBordes,"Bordes")
 
-datos_indices = [[x] for x in indice_pca]
+# Investigar otra forma de obtener mejores valores de indice
 
-coeficientes = ajuste_minimos_cuadrados(datos_indices, target)
+# Multivariable
+#coeficientes = ajuste_minimos_cuadrados(datos_indices, target)
 print("Coeficientes del modelo de minimos cuadrados:")
-print(coeficientes)
+#print(coeficientes)
+
 
 
 
