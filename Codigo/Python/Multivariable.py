@@ -145,6 +145,7 @@ def estimar(variables, coeficientes):
     return y_estimado
 
 def estimar_dataset(datos_indices, coeficientes):
+    
     """
     Docstring for estimar_dataset
     Estimamos los valores de salida para multipes observaciones
