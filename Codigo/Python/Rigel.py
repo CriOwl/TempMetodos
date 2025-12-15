@@ -3,8 +3,8 @@ import  math
 import  numpy  as  np
 import Multivariable as mv
 
-filtradoFile = "../../processed_data.csv"
-NormalizadoFile = "../../normal_Data.csv"
+filtradoFile = "processed_data.csv"
+NormalizadoFile = "normal_Data.csv"
 maxValores=list()
 minValores=list()
 valoresColumnas=list()
@@ -220,6 +220,7 @@ def resolver_sistema_gauss(A, B):
 Minimos cuadrados
 """
 
+
 def ajuste_minimos_cuadrados(datos_indices, target):
     X = [] 
     for fila in datos_indices:
@@ -266,6 +267,20 @@ indice_pcaBordes = PCA(matrizTemp)
 print("Bordes")
 matrizTemp=[indice_pcaBordes,indice_pcaAsimetria,indice_pcaDiametro,indice_pcaColor]
 
+matrizTemp = []
+
+N = len(target)  # número de pacientes
+
+for i in range(N):
+    fila = [
+        indice_pcaBordes[i],
+        indice_pcaAsimetria[i],
+        indice_pcaDiametro[i],
+        indice_pcaColor[i]
+    ]
+    matrizTemp.append(fila)
+
+
 # Investigar otra forma de obtener mejores valores de indice
 print(mv.ajuste_minimos_cuadrados(matrizTemp, target))
 
@@ -273,7 +288,6 @@ print(mv.ajuste_minimos_cuadrados(matrizTemp, target))
 #coeficientes = ajuste_minimos_cuadrados(datos_indices, target)
 print("Coeficientes del modelo de minimos cuadrados:")
 #print(coeficientes)
-
 
 
 
