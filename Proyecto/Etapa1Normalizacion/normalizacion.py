@@ -3,6 +3,87 @@ archivoFiltrado = "Archivos/datasetFiltrado.csv"
 archivoNormalizado = "Archivos/datasetNormalizado.csv"
 valoresColumnas=list()
 
+def promedioxColumna():
+    with open(archivoFiltrado, "r", encoding="utf-8", newline="") as archivo:
+        reader = csv.reader(archivo)
+        encabezado = next(reader)
+
+        numColumnas = len(encabezado)
+        sumaColumnas = [0.0] * numColumnas
+        contadorFilas = 0
+
+        for fila in reader:
+            for i in range(numColumnas):
+                sumaColumnas[i] += float(fila[i])
+            contadorFilas += 1
+
+        promedios = []
+        for i in range(numColumnas):
+            promedio = sumaColumnas[i] / contadorFilas
+            promedios.append(promedio)
+            print(f"{encabezado[i]}: {promedio}")
+
+    return promedios
+
+def desviacionxColumna(promedios):
+    with open(archivoFiltrado, "r", encoding="utf-8", newline="") as archivo:
+        reader = csv.reader(archivo)
+        encabezado = next(reader)
+
+        numColumnas = len(encabezado)
+        sumaDesviacion = [0.0] * numColumnas
+        contadorFilas = 0
+
+        for fila in reader:
+            for i in range(numColumnas):
+                sumaDesviacion[i] += (float(fila[i]) - promedios[i]) ** 2
+            contadorFilas += 1
+
+        desviaciones = []
+        for i in range(numColumnas):
+            varianza = sumaDesviacion[i] / (contadorFilas - 1)
+            desviacion = varianza ** 0.5
+            desviaciones.append(desviacion) 
+            print(f"{encabezado[i]}: {desviacion}")
+
+    return desviaciones
+
+def zscore(promedio, desviacion):
+    with open(archivoFiltrado, "r", encoding="utf-8", newline="") as archivo_entrada, \
+         open("Archivos/datasetZScore.csv", "w", encoding="utf-8", newline="") as archivo_salida:
+        reader = csv.reader(archivo_entrada)
+        writer = csv.writer(archivo_salida)
+
+        encabezado = next(reader)
+        writer.writerow(encabezado)
+
+        numColumnas = len(encabezado)
+        indice_target = encabezado.index("target")
+
+        for fila in reader:
+            fila_normalizada = []
+
+            for i in range(numColumnas):
+                x = float(fila[i])
+                
+                #para evitar normalizar el target
+
+                if i == indice_target:
+                    fila_normalizada.append(x)
+                else:
+                    media = promedio[i]
+                    desviacionE = desviacion[i]
+
+                    if desviacionE != 0:
+                        z = (x - media) / desviacionE
+                    else:
+                        z = 0.0
+                    
+                    fila_normalizada.append(z)
+
+            writer.writerow(fila_normalizada)
+
+
 def normalizar(valor, valorMax, valorMin):
     """
     Normalizar
@@ -72,3 +153,14 @@ def normalizarArchivo():
             writer.writerow(row)
                             
 #normalizarArchivo()
+
+print ("\nPromedios:\n")
+promedios = promedioxColumna()
+
+print ("\nDesviaciones estandar:\n")
+desviaciones = desviacionxColumna(promedios)
+zscore(promedios, desviaciones)
+
+
+
+
