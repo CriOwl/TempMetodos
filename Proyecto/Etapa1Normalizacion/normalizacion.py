@@ -71,4 +71,4 @@ def normalizarArchivo():
         for row in listadoNormalizado:
             writer.writerow(row)
                             
-normalizarArchivo()
+#normalizarArchivo()
