@@ -73,6 +73,6 @@ def error_cuadratico_medio(y_real, y_estimado):
     n = len(y_real)
     suma = 0.0
     for i in range(n):
-        suma =+ (y_real[i] - y_estimado[i]) ** 2
+        suma += (y_real[i] - y_estimado[i]) ** 2
     return suma / n
 
