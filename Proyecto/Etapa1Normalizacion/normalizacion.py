@@ -62,18 +62,13 @@ def zscore(promedio, desviacion):
 
         for fila in reader:
             fila_normalizada = []
-
             for i in range(numColumnas):
                 x = float(fila[i])
-                
-                #para evitar normalizar el target
-
                 if i == indice_target:
                     fila_normalizada.append(x)
                 else:
                     media = promedio[i]
                     desviacionE = desviacion[i]
-
                     if desviacionE != 0:
                         z = (x - media) / desviacionE
                     else:
@@ -159,6 +154,8 @@ promedios = promedioxColumna()
 
 print ("\nDesviaciones estandar:\n")
 desviaciones = desviacionxColumna(promedios)
+print(promedios)
+print(desviaciones)
 zscore(promedios, desviaciones)
 
 

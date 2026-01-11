@@ -47,9 +47,7 @@ def PCA(matriz):
     #Normalizacion por min-max
     min_val = np.min(indice_pca)
     max_val = np.max(indice_pca)
-    indice_pca=normalizar(indice_pca, max_val, min_val)
-    
-    return min_val,max_val,pesos_pca,indice_pca
+    return min_val,max_val,pesos_pca,indice_pca,X_centrado, pesos_pca
 
 
 
