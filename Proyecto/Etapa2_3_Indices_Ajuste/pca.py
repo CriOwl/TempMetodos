@@ -35,22 +35,16 @@ def PCA(matriz):
     print("media X:", media_X)
     covarianza = np.dot(X_centrado.T, X_centrado) / (X.shape[0] - 1) 
     autovalores, autovectores = np.linalg.eig(covarianza)
-    # Ordenar autovalores y autovectores de mayor a menor
     idx = np.argsort(autovalores)[::-1]
     autovalores = autovalores[idx]
     autovectores = autovectores[:, idx]
     pesos_pca = autovectores[:, 0]
-    # Pesos positivos para cada indice de riesgo
     if np.sum(pesos_pca) < 0:
         pesos_pca = -1 * pesos_pca
     indice_pca = np.dot(X_centrado, pesos_pca)
-    #Normalizacion por min-max
     min_val = np.min(indice_pca)
     max_val = np.max(indice_pca)
-
-    # Varianza explicada por el primer componente
     varianza_explicada = autovalores[0] / np.sum(autovalores)
-
 
     return min_val, max_val, pesos_pca, indice_pca, media_X
 
