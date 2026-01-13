@@ -174,3 +174,27 @@ print(f"Lunares mal clasificados como Melanoma (Falsos Positivos): {mal_clasific
 print(f"Melanomas mal clasificados como Lunares (Falsos Negativos): {mal_clasificados_melanoma}")
 print(f"Lunares correctamente clasificados: {bien_clasificados_lunar}")
 print(f"Melanomas correctamente clasificados: {bien_clasificados_melanoma}")
+
+
+#Indice del analisis de componentes principales PCA
+#media X: [0.27633592 0.49332868]
+#media X: [0.02421193 0.09275255 0.30412449]
+#media X: [0.1213482  0.16998866]
+#media X: [0.10783021 0.11757105]
+#Ajuste Curva y= 0.0007065358 + -0.0001670421 *Asimetria + 0.0003252928 *Borde + 0.0032676342 *Color + 0.0092081754 *Diametro
+#
+# Rango
+#Melanoma (n=197): Min=-0.00139, Max=0.00909, Media=0.00225
+#Lunar    (n=285706): Min=-0.00141, Max=0.01248, Media=0.00073
+#
+# Umbral (GRID SEARCH)
+#Sensibilidad: 62.44%
+#Especificidad: 81.60%
+#Matriz de Confusion: TP=123, FN=74 (Melanomas perdidos), FP=52564, TN=233142
+#
+#--- Resultados Finales con Umbral Optimo ---
+#0.001399445978107533 -------
+#Lunares mal clasificados como Melanoma (Falsos Positivos): 52564
+#Melanomas mal clasificados como Lunares (Falsos Negativos): 74
+#Lunares correctamente clasificados: 233142
+#Melanomas correctamente clasificados: 123
