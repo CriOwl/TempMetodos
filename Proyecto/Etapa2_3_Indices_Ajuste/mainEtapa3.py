@@ -4,7 +4,6 @@ import regresionMultivaraible as rm
 import numpy as np
 import csv
 archivoNormalizado = "Archivos/datasetZScore.csv"
-
 listaColumnas,encabezado=cp.obtenerColunmas(archivoNormalizado)
 promedio=[3.955877238084303, 8.626383141872125, 11.911934960384956, 1.0776789497811687, 7.675518232618807, 2.5449166518056723, 3.4527523151897266, 0.3078127401545026, 86.38305649118757]
 desviacion=[1.7715892643386137, 9.85873906139436, 5.9758202200215065, 0.7892753964542302, 2.545224664609628, 1.189693225217179, 1.7391597458529817, 0.12638911026574534, 52.61625728963092]
@@ -12,8 +11,10 @@ matrizAsimetria=listaColumnas[8:]
 matrizBorde=[listaColumnas[2], listaColumnas[3],listaColumnas[7]]
 matrizColor=listaColumnas[4:6]
 matrizDiametro=[listaColumnas[1], listaColumnas[6]]
+
 print("-----------------------------")
 print("Indice del analisis de componentes principales PCA")
+
 minAsimetria,maxAsimetria,vector_Propio_Asimetria,indicePCA_Asimetria,media_Asimetria=pc.PCA(matrizAsimetria)
 minBorde,maxBorde,vector_Propio_Borde,indicePCA_Borde,media_Borde=pc.PCA(matrizBorde)
 minColor,maxColor,vector_Propio_Color,indicePCA_Color,media_Color=pc.PCA(matrizColor)
@@ -37,6 +38,7 @@ vectoresPropio=[
     vector_Propio_Color,
     vector_Propio_Diametro
 ]
+
 mediaPCA=[
     media_Asimetria,
     media_Borde,
@@ -81,7 +83,6 @@ def obtenerY(valoresCrudos, promedios, desviaciones, vectoresPropios, mediaPCA):
         coeficientes[2]*indicePCA[1]+
         coeficientes[3]*indicePCA[2]+
         coeficientes[4]*indicePCA[3])
-    print(y)
     return y
     # obtener indice PCA para cada componente
 def procesar_datos_melanoma(nombre_archivo):
@@ -89,23 +90,16 @@ def procesar_datos_melanoma(nombre_archivo):
     try:
         with open(nombre_archivo, 'r') as f:
             lector = csv.reader(f)
-            
-            # 1. Saltar la cabecera (target, clin_size_long_diam_mm, etc.)
             next(lector, None)
             
             for fila in lector:
-                if fila: # Asegurarse de que la fila no esté vacía
-                    # 2. 'fila[1:]' crea una nueva lista ignorando el primer elemento (target)
-                    # 3. 'float(x)' convierte cada texto a número decimal
+                if fila:
                     datos_procesados = [float(x) for x in fila[:]]
                     matriz.append(datos_procesados)
                     
         return matriz
     except FileNotFoundError:
-        print(f"Error: El archivo '{nombre_archivo}' no fue encontrado.")
-        return []
-    except ValueError:
-        print("Error: Se encontró un valor que no se pudo convertir a número.")
+        print(f"'{nombre_archivo}' no fue encontrado.")
         return []
 matriz=procesar_datos_melanoma("Archivos/datasetFiltrado.csv")
 valorMayorMelanoma=float('-inf')
@@ -115,47 +109,33 @@ valormenorlunar=float('inf')
 contadorMax=0
 contadorMin=0
 contadorBet=0
-
-# Recopilar todos los scores y etiquetas
 all_scores = []
 all_labels = []
-melanomas=0
-lunares=0
-
-# Calcular scores para todas las filas
 for valor in matriz:
     valorNumerico = obtenerY(valor[1:], promedio, desviacion, vectoresPropio, mediaPCA)
     all_scores.append(valorNumerico)
     all_labels.append(int(valor[0]))
-    if valorNumerico >= 0.0010853300321642134:
-        melanomas+=1
-    else:
-        lunares+=1
-print(f"\nTotal Melanomas Clasificados: {melanomas}")
+    #if valorNumerico >= 0.0010853300321642134:
+    #    melanomas+=1
+    #else:
+    #    lunares+=1
 all_scores = np.array(all_scores)
 all_labels = np.array(all_labels)
 
-# Analisis de Rangos
 scores_melanoma = all_scores[all_labels == 1]
 scores_lunar = all_scores[all_labels == 0]
 
-print("\n--- Estadisticas de Scores ---")
+print("\n Rango")
 print(f"Melanoma (n={len(scores_melanoma)}): Min={scores_melanoma.min():.5f}, Max={scores_melanoma.max():.5f}, Media={scores_melanoma.mean():.5f}")
 print(f"Lunar    (n={len(scores_lunar)}): Min={scores_lunar.min():.5f}, Max={scores_lunar.max():.5f}, Media={scores_lunar.mean():.5f}")
 
-# Busqueda de Umbral Optimo (Grid Search)
-print("\n--- Buscando mejor umbral (Maximizando Sensibilidad) ---")
+print("\n Umbral (GRID SEARCH)")
 
 umbrales = np.linspace(all_scores.min(), all_scores.max(), 100)
 mejor_umbral = 0
 mejor_sensibilidad = 0
 mejor_especificidad = 0
 mejor_confusion = {}
-
-# Queremos alta sensibilidad (detectar melanomas) pero una especificidad razonable
-# Si solo maximizamos sensibilidad, el umbral sera el minimo y clasificara todo como melanoma.
-# Busquemos un balance, o reportemos varios.
-# En este caso, priorizamos sensibilidad > 0.5 si es posible.
 
 for umbral in umbrales:
     y_pred = (all_scores >= umbral).astype(int)
@@ -167,10 +147,6 @@ for umbral in umbrales:
     
     sensibilidad = tp / (tp + fn) if (tp + fn) > 0 else 0
     especificidad = tn / (tn + fp) if (tn + fp) > 0 else 0
-    
-    # Criterio Ponderado: Priorizar Sensibilidad (Minimizar Falsos Negativos)
-    # Damos doble peso a la sensibilidad para reducir Falsos Negativos
-    # Score = 2 * Sensibilidad + Especificidad
     weighted_score = 1.50 * sensibilidad + especificidad
     
     if weighted_score > (1.50 * mejor_sensibilidad + mejor_especificidad):
@@ -196,3 +172,26 @@ print(f"Lunares mal clasificados como Melanoma (Falsos Positivos): {mal_clasific
 print(f"Melanomas mal clasificados como Lunares (Falsos Negativos): {mal_clasificados_melanoma}")
 print(f"Lunares correctamente clasificados: {bien_clasificados_lunar}")
 print(f"Melanomas correctamente clasificados: {bien_clasificados_melanoma}")
+
+#Indice del analisis de componentes principales PCA
+#media X: [-1.54736188e-14  5.20911912e-17]
+#media X: [1.44054014e-14 2.32667492e-13 1.60793777e-14]
+#media X: [1.83641331e-14 2.97794604e-15]
+#media X: [ 6.64400279e-14 -8.40016187e-14]
+#Ajuste Curva y= 0.0007065358 + -0.0003758919 *Asimetria + 0.0027975822 *Borde + 0.0006563283 *Color + -0.002344415 *Diametro
+#
+# Rango
+#Melanoma (n=197): Min=-0.00136, Max=0.01985, Media=0.00302
+#Lunar    (n=285706): Min=-0.00161, Max=0.04783, Media=0.00070
+#
+# Umbral (GRID SEARCH)
+#Sensibilidad: 54.82%
+#Especificidad: 83.16%
+#Matriz de Confusion: TP=108, FN=89 (Melanomas perdidos), FP=48107, TN=237599
+#
+#--- Resultados Finales con Umbral Optimo ---
+#0.0013823422926796437 -------
+#Lunares mal clasificados como Melanoma (Falsos Positivos): 48107
+#Melanomas mal clasificados como Lunares (Falsos Negativos): 89
+#Lunares correctamente clasificados: 237599
+#Melanomas correctamente clasificados: 108
