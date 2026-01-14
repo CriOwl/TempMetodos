@@ -4,7 +4,6 @@ import regresionMultivaraible as rm
 import numpy as np
 import csv
 archivoNormalizado = "Archivos/datasetZScore.csv"
-
 listaColumnas,encabezado=cp.obtenerColunmas(archivoNormalizado)
 print(encabezado)
 for coeficiente in listaColumnas[1:]:
@@ -47,7 +46,6 @@ coeficientes=rm.ajuste_minimos_cuadrados(matrizTemp, listaColumnas[0])
 print("Ajuste Curva", "y=", round(coeficientes[0],10), "+", round(coeficientes[1],10), "*Asimetria +", round(coeficientes[2],10), "*Borde +", round(coeficientes[3],10), "*Color +", round(coeficientes[4],10), "*Diametro")
 
 def obtenerY(valoresCrudos):
-    # normalizar los valores crudos utilizando Z-score
     valoresNormalizados = []
     for i,valores in enumerate(valoresCrudos):
         z = (valores - min[i]) / (max[i] - min[i])
@@ -92,20 +90,15 @@ def obtenerY(valoresCrudos):
         coeficientes[3]*indiceABCDE[2]+
         coeficientes[4]*indiceABCDE[3])
     return y
-    # obtener indice PCA para cada componente
 def procesar_datos_melanoma(nombre_archivo):
     matriz = []
     try:
         with open(nombre_archivo, 'r') as f:
             lector = csv.reader(f)
-            
-            # 1. Saltar la cabecera (target, clin_size_long_diam_mm, etc.)
             next(lector, None)
             
             for fila in lector:
-                if fila: # Asegurarse de que la fila no esté vacía
-                    # 2. 'fila[1:]' crea una nueva lista ignorando el primer elemento (target)
-                    # 3. 'float(x)' convierte cada texto a número decimal
+                if fila: 
                     datos_procesados = [float(x) for x in fila[:]]
                     matriz.append(datos_procesados)
                     
@@ -125,12 +118,10 @@ contadorMax=0
 contadorMin=0
 contadorBet=0
 
-# Recopilar todos los scores y etiquetas
 all_scores = []
 all_labels = []
 melanomas=0
 lunares=0
-# Calcular scores para todas las filas
 for valor in matriz:
     valorNumerico = obtenerY(valor[1:])
     all_scores.append(valorNumerico)
