@@ -14,13 +14,14 @@ matrizAsimetria=listaColumnas[8:]
 matrizBorde=[listaColumnas[2], listaColumnas[3],listaColumnas[7]]
 matrizColor=listaColumnas[4:6]
 matrizDiametro=[listaColumnas[1], listaColumnas[6]]
-print("-----------------------------")
+
 print("Indice del analisis de componentes principales PCA")
 minAsimetria,maxAsimetria,vector_Propio_Asimetria,indicePCA_Asimetria,media_Asimetria=pc.PCA(matrizAsimetria)
 minBorde,maxBorde,vector_Propio_Borde,indicePCA_Borde,media_Borde=pc.PCA(matrizBorde)
 minColor,maxColor,vector_Propio_Color,indicePCA_Color,media_Color=pc.PCA(matrizColor)
 minDiametro,maxDiametro,vector_Propio_Diametro,indicePCA_Diametro,media_Diametro=pc.PCA(matrizDiametro)
 matrizTemp=[]
+
 for i in range(len(listaColumnas[0])):
     fila = [
         indicePCA_Asimetria[i],
@@ -39,12 +40,14 @@ vectoresPropio=[
     vector_Propio_Color,
     vector_Propio_Diametro
 ]
+
 mediaPCA=[
     media_Asimetria,
     media_Borde,
     media_Color,
     media_Diametro
 ]
+
 #3.4,3.265153,8.886309,0,6.290359,1.194905,4.798335,0.3619048,105
 def obtenerY(valoresCrudos, promedios, desviaciones, vectoresPropios, mediaPCA):
     # normalizar los valores crudos utilizando Z-score
@@ -52,6 +55,7 @@ def obtenerY(valoresCrudos, promedios, desviaciones, vectoresPropios, mediaPCA):
     for i,valores in enumerate(valoresCrudos):
         z = (valores - min[i]) / (max[i] - min[i])
         valoresNormalizados.append(z)
+
 #target ,
 # clin_size_long_diam_mm, 0
 # tbp_lv_areaMM2, 1
@@ -62,17 +66,20 @@ def obtenerY(valoresCrudos, promedios, desviaciones, vectoresPropios, mediaPCA):
 # tbp_lv_norm_border, 6
 # tbp_lv_symm_2axis, 7
 # tbp_lv_symm_2axis_angle 8
+
     valoresNormalizadosDict={
             "Asimetria": valoresNormalizados[7:],
             "Borde": [valoresNormalizados[1], valoresNormalizados[2], valoresNormalizados[6]],
             "Color": [valoresNormalizados[3],valoresNormalizados[4]],
             "Diametro": [valoresNormalizados[0], valoresNormalizados[5]]
     }
+
     valoresCentradosPCA=[]
     indicePCA=[]
     for i,valores in enumerate(valoresNormalizadosDict.values()):
         valoresCentradosPCA.append(np.array(valores)-np.array(mediaPCA[i]))
         indicePCA.append(np.dot(valoresCentradosPCA[i], vectoresPropios[i]))
+
     #Ajuste Curva y= 0.0006890449 + -0.0001848667 *Asimetria + 0.002024672 *Borde + 0.0006305808 *Color + -0.0016166086 *Diametro
     y= (coeficientes[0] +
         coeficientes[1]*indicePCA[0]+
@@ -81,6 +88,7 @@ def obtenerY(valoresCrudos, promedios, desviaciones, vectoresPropios, mediaPCA):
         coeficientes[4]*indicePCA[3])
     return y
     # obtener indice PCA para cada componente
+
 def procesar_datos_melanoma(nombre_archivo):
     matriz = []
     try:
