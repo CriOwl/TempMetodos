@@ -55,7 +55,7 @@ def normalizarArchivo():
                 salida.append(normalizar(v, maxValores[i], minValores[i]))
             writer.writerow(salida)
 """
-def promedioxColumna():
+def promedioxColumna(archivoFiltrado):
     """
     Calcula la meda aritmética de cada columna numérica en el dataset filtado
 
@@ -87,7 +87,7 @@ def promedioxColumna():
 
     return promedios
 
-def desviacionxColumna(promedios):
+def desviacionxColumna(promedios,archivoFiltrado):
     """
     Calcula la desviacion estandar poblacional para cada columna del dataset
 

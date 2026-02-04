@@ -1,6 +1,6 @@
-import coeficientePearson as cp
-import pca as pc
-import regresionMultivaraible as rm
+from . import coeficientePearson as cp
+from . import pca as pc
+from . import regresionMultivaraible as rm
 archivoNormalizado = "Archivos/datasetNormalizado.csv"
 
 listaColumnas,encabezado=cp.obtenerColunmas(archivoNormalizado)

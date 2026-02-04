@@ -1,5 +1,5 @@
 import math
-import recursosMatrices as rm
+from . import recursosMatrices as rm
 
 """
 Minimos cuadrados

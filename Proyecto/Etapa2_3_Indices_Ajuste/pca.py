@@ -1,8 +1,9 @@
 import numpy as np
 import math
-import coeficientePearson as cp
+from . import coeficientePearson as cp
 
 def normalizar(valor, valorMax, valorMin):
+    
     """
     Normalizar
     Se aplica la normalizacion Min-Max a un valor
