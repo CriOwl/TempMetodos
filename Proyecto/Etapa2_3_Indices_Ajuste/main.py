@@ -63,5 +63,58 @@ def entrenar(archivoEntrenamiento):
         "Diametro": {"vectorPropio": vector_Propio_Diametro, "media": media_Diametro},
         "coeficientes": {"terminoIndependiente": coeficientes[0], "Asimetria": coeficientes[1], "Borde": coeficientes[2], "Color": coeficientes[3], "Diametro": coeficientes[4]}
     }
+
+    return diccionarioEntrenamiento
     # Guardar el diccionario de entrenamiento en un Json y eso en un archivo pero antes guardar el umbral con la funcion obtener Y
 entrenar("Archivos/train-metadata.csv")
+
+
+def obtenerY(diccionarioEntrenamiento,archivoDatos):
+
+    promedios = diccionarioEntrenamiento["promedios"]
+    desviaciones = diccionarioEntrenamiento["desviaciones"]
+
+    archivoNormalizado = "Archivos/datasetNormalizadoZ-score.csv"
+    nor.zscore(promedios, desviaciones, archivoDatos, archivoNormalizado)
+
+    columnasDatos, _ = pears.obtenerColunmas(archivoNormalizado)
+    
+    matrizAsimetria=[columnasDatos[2],columnasDatos[3]]
+    matrizBorde=[columnasDatos[3],columnasDatos[7]]
+    matrizColor=[columnasDatos[4],columnasDatos[5],columnasDatos[8],columnasDatos[9]]
+    matrizDiametro=[columnasDatos[1], columnasDatos [6]]
+    #pa la asimetria
+    VectorPropioAsimetria = diccionarioEntrenamiento["Asimetria"]["vectorPropio"]
+    media_Asimetria = diccionarioEntrenamiento["Asimetria"]["media"]
+    _, _, _, indicePCA_Asimetria, _ = pca.PCA(matrizAsimetria,VectorPropioAsimetria, media_Asimetria)
+    #pa el borde
+    VectorPropioBorde = diccionarioEntrenamiento["Borde"]["vectorPropio"]
+    media_Borde = diccionarioEntrenamiento["Borde"]["media"]
+    _, _, _, indicePCA_Borde, _ = pca.PCA(matrizBorde,VectorPropioBorde, media_Borde)
+    #pa el color
+    VectorPropioColor = diccionarioEntrenamiento["Color"]["vectorPropio"]
+    media_Color = diccionarioEntrenamiento["Color"]["media"]
+    _, _, _, indicePCA_Color, _ = pca.PCA(matrizColor,VectorPropioColor, media_Color)
+    #pa el diametro
+    VectorPropioDiametro = diccionarioEntrenamiento["Diametro"]["vectorPropio"]
+    media_Diametro = diccionarioEntrenamiento["Diametro"]["media"]
+    _, _, _, indicePCA_Diametro, _ = pca.PCA(matrizDiametro,VectorPropioDiametro, media_Diametro)
+    
+    coeficientes = diccionarioEntrenamiento["coeficientes"]
+    
+    y_estimado = []
+
+    for i in range(len(indiceA)):
+       y = (
+        coeficientes["terminoIndependiente"],
+        coeficientes["Asimetria"]*indicePCA_Asimetria[i],
+        coeficientes["Borde"]*indicePCA_Borde[i],
+        coeficientes["Color"]*indicePCA_Color[i],
+        coeficientes["Diametro"]*indicePCA_Diametro[i]
+       )
+       y_estimado.append(y)
+
+return y_estimado
+
+diccionario = entrenar("Archivos/train-metadata.csv")
+print(obtenerY(diccionario, "Archivos/test-metadata.csv"))
