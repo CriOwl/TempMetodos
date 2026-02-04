@@ -193,3 +193,46 @@ def entrenar(archivoEntrenamiento):
 
 test = entrenar("Archivos/train-metadata.csv")
 
+
+def evaluarConUmbral(ruta_csv,ruta_json = "Archivos/diccionarioEntrenamiento.json" ):
+
+    y_scores = obtenerY(ruta_csv)
+    scores = np.asarray(y_scores, dtype=float)
+
+    with open(ruta_json, "r", encoding="utf-8") as f:
+
+        diccionarioEntrenamiento = json.load(f)
+        
+        if "umbral" not in diccionarioEntrenamiento:
+            print("No hay umbral dentro del dicionario")
+            return
+        
+        umbral = float(diccionarioEntrenamiento["umbral"])
+
+        archivoNormalizadoZ= "Archivos/datasetTesteoNormalizadoZ-score.csv"
+        columnasDatos, _ = pears.obtenerColunmas(archivoNormalizadoZ)
+        target = np.asarray(columnasDatos[0], dtype=int)
+
+        if scores.shape[0] != target.shape[0]:
+            print("Las dimensiones de y_scores y target no son iguales")
+            return
+        
+        y_pred = (scores >= umbral).astype(int)
+
+        tp = int(np.sum((target == 1) & (y_pred == 1)))
+        fn = int(np.sum((target == 1) & (y_pred == 0)))
+        tn = int(np.sum((target == 0) & (y_pred == 0)))
+        fp = int(np.sum((target == 0) & (y_pred == 1)))
+        
+
+        sensibilidad = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        especificidad = tn / (tn + fp) if (tn + fp) > 0 else 0.0
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        
+        print(f"Melanoma detectados (TP): {tp}")
+        print(f"Melanomas no detectados (FN): {fn}")
+        print(f"Lunares marcados como cancer (FP): {fp}")
+        print(f"Sensibilidad: {sensibilidad}")
+        print(f"Especificidad: {especificidad}")
+        print(f"Precision: {precision}")
+
