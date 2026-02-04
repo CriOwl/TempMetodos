@@ -118,6 +118,7 @@ def obtenerY(diccionarioEntrenamiento,archivoDatos):
        )
        y_estimado.append(y)
 
+    return y_estimado
 
 diccionario = entrenar("Archivos/train-metadata.csv")
 print(obtenerY(diccionario, "Archivos/test-metadata.csv"))
