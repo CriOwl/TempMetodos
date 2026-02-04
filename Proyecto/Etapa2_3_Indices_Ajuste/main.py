@@ -44,4 +44,5 @@ def entrenar(archivoEntrenamiento):
         "Diametro": {"vectorPropio": vector_Propio_Diametro, "media": media_Diametro},
         "coeficientes": {"terminoIndependiente": coeficientes[0], "Asimetria": coeficientes[1], "Borde": coeficientes[2], "Color": coeficientes[3], "Diametro": coeficientes[4]}
     }
+    # Guardar el diccionario de entrenamiento en un Json y eso en un archivo pero antes guardar el umbral con la funcion obtener Y
 entrenar("Archivos/train-metadata.csv")
