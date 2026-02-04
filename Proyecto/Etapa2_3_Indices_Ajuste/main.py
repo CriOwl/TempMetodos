@@ -3,7 +3,7 @@ import Proyecto.Etapa0Analisis.filtrado as fil
 import Proyecto.Etapa1Normalizacion.normalizacion as nor
 import Proyecto.Etapa2_3_Indices_Ajuste.coeficientePearson as pears
 import Proyecto.Etapa2_3_Indices_Ajuste.pca as pca
-import Proyecto.Etapa2_3_Indices_Ajuste.regresionMultivaraible as rm
+import Proyecto.Etapa2_3_Indices_Ajuste.minimosCuadrados as rm
 import json
 import numpy as np
 import math

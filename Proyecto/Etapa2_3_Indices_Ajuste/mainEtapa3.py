@@ -1,6 +1,6 @@
 from . import coeficientePearson as cp
 from . import pca as pc
-from . import regresionMultivaraible as rm
+from . import minimosCuadrados as rm
 archivoNormalizado = "Archivos/datasetNormalizado.csv"
 
 listaColumnas,encabezado=cp.obtenerColunmas(archivoNormalizado)
@@ -77,7 +77,7 @@ for umbral in umbrales:
     especificidad = tn / (tn + fp) if (tn + fp) > 0 else 0
     weighted_score = 1.50 * sensibilidad + especificidad
     
-    if weighted_score > (1.50 * mejor_sensibilidad + mejor_especificidad):
+    if weighted_score > (1.00 * mejor_sensibilidad + mejor_especificidad):
         mejor_sensibilidad = sensibilidad
         mejor_especificidad = especificidad
         mejor_umbral = umbral

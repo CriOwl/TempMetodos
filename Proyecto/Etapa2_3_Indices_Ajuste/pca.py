@@ -2,35 +2,6 @@ import numpy as np
 import math
 from . import coeficientePearson as cp
 
-def calcular_media(X):
-    """
-    Docstring for calcular_media
-    Calcula el vector de media aritmetica para un conjunto de datos multidimensional.
-    :param X: Matriz de datos de entrada.
-    """
-    return np.mean(X, axis=0)
-
-def calcular_vector_propio(Xcentrado,X):
-    """
-    Docstring for calcular_vector_propio
-    Calculamos el vector propio principal de la matriz de covarianza
-    El proceso incluye el calculo de la matriz de covarianza, 
-    la optencion de autovalores y autovectores.
-
-    :param Xcentrado: Matriz de datos tras haber restado la media
-    :param X: Matriz de datos orginal utilizada para obtener las dimesiones del set de datos.
-    """
-    covarianza = np.dot(Xcentrado.T, Xcentrado) / (X.shape[0] - 1) 
-    autovalores, autovectores = np.linalg.eig(covarianza)
-
-    idx = np.argsort(autovalores)[::-1]
-    autovectores = autovectores[:, idx]
-    
-    v = autovectores[:, 0]
-    if np.sum(v) < 0:
-        v = -1 * v
-    return v
-
 def PCA(matriz):
     """PCA
     Realiza una reducion de dimensionalidad mediante el analisis de componentes principales (PCA)
@@ -48,12 +19,22 @@ def PCA(matriz):
     media_X = np.mean(X, axis=0)
     X_centrado = X - media_X
     
-    pesos_pca = calcular_vector_propio(X_centrado,X)
+    covarianza = np.dot(X_centrado.T, X_centrado) / (X.shape[0] - 1) 
+    autovalores, autovectores = np.linalg.eig(covarianza)
+    # Ordenar autovalores y autovectores de mayor a menor
+    idx = np.argsort(autovalores)[::-1]
+    autovalores = autovalores[idx]
+    autovectores = autovectores[:, idx]
+    pesos_pca = autovectores[:, 0]
+    # Pesos positivos para cada indice de riesgo
+    if np.sum(pesos_pca) < 0:
+        pesos_pca = -1 * pesos_pca
     indice_pca = np.dot(X_centrado, pesos_pca)
+    #Normalizacion por min-max
     min_val = np.min(indice_pca)
     max_val = np.max(indice_pca)
     
-    return min_val,max_val,pesos_pca,indice_pca,media_X
+    return min_val,max_val,pesos_pca,indice_pca
 
 def calcularIndicePCA(vectorX,mediaX,pesosPca):
     """calcularIndicePCA
