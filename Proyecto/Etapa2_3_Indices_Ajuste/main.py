@@ -69,12 +69,10 @@ def entrenar(archivoEntrenamiento):
     with open(pathArchivoEntrenado, "w", encoding="utf-8") as f:
         json.dump(diccionarioEntrenamiento, f, indent=4, default=lambda x: x.tolist())
     return diccionarioEntrenamiento
-    # Guardar el diccionario de entrenamiento en un Json y eso en un archivo pero antes guardar el umbral con la funcion obtener Y
-entrenar("Archivos/train-metadata.csv")
 
-
-def obtenerY(diccionarioEntrenamiento,archivoDatos):
-
+def obtenerY(archivoDatos):    
+    with open(diccionarioEntrenamiento, "r", encoding="utf-8") as f:
+        diccionarioEntrenamiento = json.load(f)
     promedios = diccionarioEntrenamiento["promedios"]
     desviaciones = diccionarioEntrenamiento["desviaciones"]
 
