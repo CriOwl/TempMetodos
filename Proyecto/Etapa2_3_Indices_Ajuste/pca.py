@@ -2,7 +2,20 @@ import numpy as np
 import math
 from . import coeficientePearson as cp
 
+def calcular_media(X):
+    return np.mean(X, axis=0)
 
+def calcular_vector_propio(Xcentrado):
+    covarianza = np.dot(Xcentrado.T, Xcentrado) / (X.shape[0] - 1) 
+    autovalores, autovectores = np.linalg.eig(covarianza)
+
+    idx = np.argsort(autovalores)[::-1]
+    autovectores = autovectores[:, idx]
+    
+    v = autovectores[:, 0]
+    if np.sum(v) < 0:
+        v = -1 * v
+    return v
 
 def PCA(matriz):
     """PCA
@@ -21,18 +34,8 @@ def PCA(matriz):
     media_X = np.mean(X, axis=0)
     X_centrado = X - media_X
     
-    covarianza = np.dot(X_centrado.T, X_centrado) / (X.shape[0] - 1) 
-    autovalores, autovectores = np.linalg.eig(covarianza)
-    # Ordenar autovalores y autovectores de mayor a menor
-    idx = np.argsort(autovalores)[::-1]
-    autovalores = autovalores[idx]
-    autovectores = autovectores[:, idx]
-    pesos_pca = autovectores[:, 0]
-    # Pesos positivos para cada indice de riesgo
-    if np.sum(pesos_pca) < 0:
-        pesos_pca = -1 * pesos_pca
+    pesos_pca = calcular_vector_propio(X_centrado)
     indice_pca = np.dot(X_centrado, pesos_pca)
-    #Normalizacion por min-max
     min_val = np.min(indice_pca)
     max_val = np.max(indice_pca)
     
