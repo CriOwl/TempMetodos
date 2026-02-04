@@ -7,6 +7,25 @@ import Proyecto.Etapa2_3_Indices_Ajuste.regresionMultivaraible as rm
 
 def entrenar(archivoEntrenamiento):
     """ 
+    Ejecuta el flujo completo de entrenamiento del modelo para la deteccion de melanoma
+
+    Este proceso integra todas las etapas del analisis numerico desarrollado:
+    1. Preprocesamiento: Calculo de promedio, desviaciones y normalizacion zscore
+    2. Reduccion de dimensionalidad: agrupacion de variables segun el estandar ABCD y aplicacion de PCA para obtener vectores propios u medias de proyecccion.
+    3. Ajuste Numerico: Construccion de la matriz de diseño y resolucion del sistema de ecuaciones mediante minimos cuadrados para hallar los coeficientes beta.
+
+    Args:
+        archivoEntrenamiento (str): Ruta del archivo CSV con el dataset crudo. 
+
+    Returns:
+        dict: Diccionario de parametros del modelo que incluye
+            - promedios y desviaciones para normalizar datos nuevos
+            - vectorPropio y media para categiriaas ABCD para el PCA
+            - coeficientes pesos finales para la regresion multivariable
+
+    Note:
+        se imprime en consola la ecuacion final del modelo ajustado
+        y = b0 + b1*Asimetria + b2*Borde + b3*Color + b4*Diametro.
     """
     archivoCrudo = archivoEntrenamiento
     archivoFiltrado = "Archivos/datasetFiltrado.csv"
