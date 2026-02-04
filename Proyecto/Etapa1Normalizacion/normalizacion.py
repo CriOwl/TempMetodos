@@ -56,7 +56,17 @@ def normalizarArchivo():
             writer.writerow(salida)
 """
 def promedioxColumna():
+    """
+    Calcula la meda aritmética de cada columna numérica en el dataset filtado
+
+    Returns:
+        list: una lista de floats que representan el promedio de cada columna
+
+    Raises: 
+        FileNotFoundError: Si el archivo especificado en archivoFiltrado no existi. 
+    """
     with open(archivoFiltrado, "r", encoding="utf-8", newline="") as archivo:
+        
         reader = csv.reader(archivo)
         encabezado = next(reader)
 
@@ -78,6 +88,19 @@ def promedioxColumna():
     return promedios
 
 def desviacionxColumna(promedios):
+    """
+    Calcula la desviacion estandar poblacional para cada columna del dataset
+
+    Args:
+        promedios list: Lista con los promedios previamente calculados de cada columna 
+    
+    Returns:
+        list: Una lista de floats con la desviaciones estándar por columna
+        
+    
+    :param promedios: Description
+    """
+
     with open(archivoFiltrado, "r", encoding="utf-8", newline="") as archivo:
         reader = csv.reader(archivo)
         encabezado = next(reader)
@@ -101,6 +124,21 @@ def desviacionxColumna(promedios):
     return desviaciones
 
 def zscore(promedio, desviacion, archivoFiltrado, archivoNormalizadoZScore):
+    """
+        Aplica la normalizacion zscore a los datos del archivo
+
+        la formula aplicada es z = (x - media) / desviacion. La columna target se mantiene sin cambios para no afectar la clasificacion binaria
+
+    Args:
+        :param promedio: Lista de medias de las colimnas
+        :param desviacion: Lista de desviaciones estandar de las columnas
+        :param archivoFiltrado: Ruta del archivo fuente
+        :param archivoNormalizadoZScore: Ruta donde se guarda el archivo de estandarizacion
+
+    Returns:
+        None: se escriben directamente en el archivo de salida
+    """
+
     with open(archivoFiltrado, "r", encoding="utf-8", newline="") as archivo_entrada, \
         open(archivoNormalizadoZScore, "w", encoding="utf-8", newline="") as archivo_salida:
         reader = csv.reader(archivo_entrada)
