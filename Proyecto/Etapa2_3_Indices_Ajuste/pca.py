@@ -5,7 +5,7 @@ from . import coeficientePearson as cp
 def calcular_media(X):
     return np.mean(X, axis=0)
 
-def calcular_vector_propio(Xcentrado):
+def calcular_vector_propio(Xcentrado,X):
     
     covarianza = np.dot(Xcentrado.T, Xcentrado) / (X.shape[0] - 1) 
     autovalores, autovectores = np.linalg.eig(covarianza)
@@ -35,7 +35,7 @@ def PCA(matriz):
     media_X = np.mean(X, axis=0)
     X_centrado = X - media_X
     
-    pesos_pca = calcular_vector_propio(X_centrado)
+    pesos_pca = calcular_vector_propio(X_centrado,X)
     indice_pca = np.dot(X_centrado, pesos_pca)
     min_val = np.min(indice_pca)
     max_val = np.max(indice_pca)
