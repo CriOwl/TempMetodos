@@ -44,7 +44,6 @@ def pearson(valorX, valorY):
         sumaXY += dx * dy
         sumaX2 += dx * dx
         sumaY2 += dy * dy
-    
     return sumaXY / math.sqrt(sumaX2 * sumaY2)
 
 
@@ -59,14 +58,3 @@ def pearson(valorX, valorY):
 #0.001894184341872667 ----- tbp_lv_norm_border
 #-0.003250227120819911 ----- tbp_lv_symm_2axis
 #0.0005004242912260194 ----- tbp_lv_symm_2axis_angle
-
-#0.0325833090744688 ----- clin_size_long_diam_mm
-#0.04302830016159504 ----- tbp_lv_areaMM2
-#0.03482986852518373 ----- tbp_lv_perimeterMM
-#0.0283547398762334 ----- tbp_lv_color_std_mean
-#0.025109405446333402 ----- tbp_lv_deltaLBnorm
-#0.0361992544374807 ----- tbp_lv_minorAxisMM
-#0.0018941843418726419 ----- tbp_lv_norm_border
-#-0.003250227120820135 ----- tbp_lv_symm_2axis
-#0.0005004242912265165 ----- tbp_lv_symm_2axis_angle
-
