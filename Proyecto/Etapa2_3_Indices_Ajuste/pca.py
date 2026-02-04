@@ -34,7 +34,7 @@ def PCA(matriz):
     min_val = np.min(indice_pca)
     max_val = np.max(indice_pca)
     
-    return min_val,max_val,pesos_pca,indice_pca
+    return min_val,max_val,pesos_pca,indice_pca,media_X
 
 def calcularIndicePCA(vectorX,mediaX,pesosPca):
     """calcularIndicePCA

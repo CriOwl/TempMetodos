@@ -184,7 +184,7 @@ def entrenar(archivoEntrenamiento):
     with open(diccionarioEntrenamientoPath, "w", encoding="utf-8") as f:
         json.dump(diccionarioEntrenamiento, f, indent=4)
     valoresY=obtenerY(archivoEntrenamiento)
-    umbral=optimizar_umbral_desde_scores(valoresY,columnasDatos[0],n_puntos=1000,w_sens=1.50,w_spec=1.00)
+    umbral=optimizar_umbral_desde_scores(valoresY,columnasDatos[0],n_puntos=100000,w_sens=1.93,w_spec=1.00)
     diccionarioEntrenamiento["umbral"] = umbral
     diccionarioEntrenamiento = preparar_para_json(diccionarioEntrenamiento)
     with open(diccionarioEntrenamientoPath, "w", encoding="utf-8") as f:
@@ -194,7 +194,7 @@ def entrenar(archivoEntrenamiento):
 test = entrenar("Archivos/train-metadata.csv")
 
 
-def evaluarConUmbral(ruta_csv,ruta_json = "Archivos/diccionarioEntrenamiento.json" ):
+def evaluarConUmbral(ruta_csv,ruta_json = "Archivos/diccionario_entrenamiento.json" ):
 
     y_scores = obtenerY(ruta_csv)
     scores = np.asarray(y_scores, dtype=float)
@@ -236,3 +236,5 @@ def evaluarConUmbral(ruta_csv,ruta_json = "Archivos/diccionarioEntrenamiento.jso
         print(f"Especificidad: {especificidad}")
         print(f"Precision: {precision}")
 
+
+evaluarConUmbral("Archivos/train-metadata.csv")
