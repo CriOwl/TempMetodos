@@ -4,7 +4,8 @@ import Proyecto.Etapa1Normalizacion.normalizacion as nor
 import Proyecto.Etapa2_3_Indices_Ajuste.coeficientePearson as pears
 import Proyecto.Etapa2_3_Indices_Ajuste.pca as pca
 import Proyecto.Etapa2_3_Indices_Ajuste.regresionMultivaraible as rm
-
+import json
+diccionarioEntrenamiento = "Archivos/diccionario_entrenamiento.json"
 def entrenar(archivoEntrenamiento):
     """ 
     Ejecuta el flujo completo de entrenamiento del modelo para la deteccion de melanoma
@@ -27,6 +28,7 @@ def entrenar(archivoEntrenamiento):
         se imprime en consola la ecuacion final del modelo ajustado
         y = b0 + b1*Asimetria + b2*Borde + b3*Color + b4*Diametro.
     """
+    global diccionarioEntrenamiento
     archivoCrudo = archivoEntrenamiento
     archivoFiltrado = "Archivos/datasetFiltrado.csv"
     archivoNormalizado = "Archivos/datasetNormalizadoZ-score.csv"
@@ -66,14 +68,7 @@ def entrenar(archivoEntrenamiento):
 
     return diccionarioEntrenamiento
 
-def obtenerY(archivoDatos):    
-    with open(diccionarioEntrenamiento, "r", encoding="utf-8") as f:
-        diccionarioEntrenamiento = json.load(f)
-    # Guardar el diccionario de entrenamiento en un Json y eso en un archivo pero antes guardar el umbral con la funcion obtener Y
-entrenar("Archivos/train-metadata.csv")
-
-
-def obtenerY(diccionarioEntrenamiento,archivoDatos):
+def obtenerY(archivoDatos):
     
     """
     Docstring for obtenerY
@@ -84,65 +79,44 @@ def obtenerY(diccionarioEntrenamiento,archivoDatos):
     :param diccionarioEntrenamiento: DIccionario que contiene los parametros aprendidos. 
     :param archivoDatos: Ruta del archivo CSV con los datos a evaluar "testeo"
     """
-<<<<<<< HEAD
+    global diccionarioEntrenamiento
     with open(diccionarioEntrenamiento, "r", encoding="utf-8") as f:
         diccionarioEntrenamiento = json.load(f)
-=======
-
->>>>>>> 664c9b5e93890e84adb42fee466100b195edcafd
     promedios = diccionarioEntrenamiento["promedios"]
     desviaciones = diccionarioEntrenamiento["desviaciones"]
-    archivoNormalizado = "Archivos/datasetNormalizadoZ-score.csv"
-    nor.zscore(promedios, desviaciones, archivoDatos, archivoNormalizado)
-    columnasDatos, _ = pears.obtenerColunmas(archivoNormalizado)
-    
-    matrizAsimetria=[columnasDatos[2],columnasDatos[3]]
-    matrizBorde=[columnasDatos[3],columnasDatos[7]]
-    matrizColor=[columnasDatos[4],columnasDatos[5],columnasDatos[8],columnasDatos[9]]
-    matrizDiametro=[columnasDatos[1], columnasDatos [6]]
-
+    archivoFiltrado = "Archivos/datasetTesteoFiltrado.csv"
+    archivoNormalizadoZ= "Archivos/datasetTesteoNormalizadoZ-score.csv"
+    fil.filtrado(archivoDatos, archivoFiltrado)
+    nor.zscore(promedios, desviaciones, archivoFiltrado, archivoNormalizadoZ)
+    columnasDatos, _ = pears.obtenerColunmas(archivoNormalizadoZ)
+    matrizAsimetria=[]
+    matrizBorde=[]
+    matrizColor=[]
+    matrizDiametro=[]
+    for i in range(len(columnasDatos[0])):
+        matrizAsimetria.append([columnasDatos[2][i],columnasDatos[3][i]])
+        matrizBorde.append([columnasDatos[3][i],columnasDatos[7][i]])
+        matrizColor.append([columnasDatos[4][i],columnasDatos[5][i],columnasDatos[8][i],columnasDatos[9][i]])
+        matrizDiametro.append([columnasDatos[1][i], columnasDatos [6][i]])
     indiceAsimetria = []
-
     vectorPropio_Asimetria = diccionarioEntrenamiento["Asimetria"]["vectorPropio"]
     media_Asimetria = diccionarioEntrenamiento["Asimetria"]["media"]
-    for i in range(len(matrizAsimetria[0])):
-        suma = 0
-        for j in range(len(matrizAsimetria)):
-            suma += matrizAsimetria[j][i] * vectorPropio_Asimetria[j]
-        indiceAsimetria.append(suma)
-    
-    indiceBorde = []
-
     vectorPropio_Borde = diccionarioEntrenamiento["Borde"]["vectorPropio"]
     media_Borde = diccionarioEntrenamiento["Borde"]["media"]
-    for i in range(len(matrizBorde[0])):
-        suma = 0
-        for j in range(len(matrizBorde)):
-            suma += matrizBorde[j][i] * vectorPropio_Borde[j]
-        indiceBorde.append(suma)
-    
-    indiceColor = []
-
     vectorPropio_Color = diccionarioEntrenamiento["Color"]["vectorPropio"]
     media_Color = diccionarioEntrenamiento["Color"]["media"]
-    for i in range(len(matrizColor[0])):
-        suma = 0
-        for j in range(len(matrizColor)):
-            suma += matrizColor[j][i] * vectorPropio_Color[j]
-        indiceColor.append(suma)
-    
-    indiceDiametro = []
-
     vectorPropio_Diametro = diccionarioEntrenamiento["Diametro"]["vectorPropio"]
     media_Diametro = diccionarioEntrenamiento["Diametro"]["media"]
-    for i in range(len(matrizDiametro[0])):
-        suma = 0
-        for j in range(len(matrizDiametro)):
-            suma += matrizDiametro[j][i] * vectorPropio_Diametro[j]
-        indiceDiametro.append(suma)
-    
+    indiceAsimetria = []
+    indiceBorde = []
+    indiceColor = []
+    indiceDiametro = []
+    for i in range(len(matrizAsimetria)):
+        indiceAsimetria.append(pca.calcularIndicePCA(matrizAsimetria[i], media_Asimetria, vectorPropio_Asimetria))
+        indiceDiametro.append(pca.calcularIndicePCA(matrizDiametro[i], media_Diametro, vectorPropio_Diametro))
+        indiceBorde.append(pca.calcularIndicePCA(matrizBorde[i], media_Borde, vectorPropio_Borde))
+        indiceColor.append(pca.calcularIndicePCA(matrizColor[i], media_Color, vectorPropio_Color))
     coeficientes=diccionarioEntrenamiento["coeficientes"]
-    
     y_estimado = []
     for i in range(len(indiceAsimetria)):
         y = (
@@ -152,13 +126,11 @@ def obtenerY(diccionarioEntrenamiento,archivoDatos):
             coeficientes["Color"] * indiceColor[i] + 
             coeficientes["Diametro"] * indiceDiametro[i]
         )
-        
         y_estimado.append(y)
-    
     return y_estimado
 
 
 
-diccionario = entrenar("Archivos/train-metadata.csv")
-
+test = obtenerY("Archivos/train-metadata.csv")
+print(len(test))
 

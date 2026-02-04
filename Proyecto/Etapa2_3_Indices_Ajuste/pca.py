@@ -55,7 +55,21 @@ def PCA(matriz):
     
     return min_val,max_val,pesos_pca,indice_pca,media_X
 
+def calcularIndicePCA(vectorX,mediaX,pesosPca):
+    """calcularIndicePCA
+    Calcula el indice PCA para un nuevo conjunto de datos
 
+    Args:
+        vectorX (list): Vector con los valores de las variables seleccionadas
+        mediaX (list): Vector con las medias de las variables seleccionadas
+        pesosPca (list): Vector con los pesos PCA de las variables seleccionadas
+
+    Returns:
+        float: Indice PCA calculado
+    """
+    Xcentrado = np.array(vectorX) - np.array(mediaX)
+    indicePCA = np.dot(Xcentrado, pesosPca)
+    return indicePCA
 
 # Resultados:
 #Indice del analisis de componentes principales PCA
