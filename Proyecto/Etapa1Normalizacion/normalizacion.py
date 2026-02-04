@@ -58,7 +58,8 @@ def normalizarArchivo():
 def promedioxColumna(archivoFiltrado):
     """
     Calcula la meda aritmética de cada columna numérica en el dataset filtado
-
+    Args: 
+    archivoFiltrado (str): Ruta del archivo CSV con el dataset filtrado
     Returns:
         list: una lista de floats que representan el promedio de cada columna
 
@@ -93,12 +94,12 @@ def desviacionxColumna(promedios,archivoFiltrado):
 
     Args:
         promedios list: Lista con los promedios previamente calculados de cada columna 
+        archivoFiltrado (str): Ruta del archivo CSV con el dataset filtrado
     
     Returns:
         list: Una lista de floats con la desviaciones estándar por columna
         
-    
-    :param promedios: Description
+   
     """
 
     with open(archivoFiltrado, "r", encoding="utf-8", newline="") as archivo:
@@ -130,10 +131,10 @@ def zscore(promedio, desviacion, archivoFiltrado, archivoNormalizadoZScore):
         la formula aplicada es z = (x - media) / desviacion. La columna target se mantiene sin cambios para no afectar la clasificacion binaria
 
     Args:
-        :param promedio: Lista de medias de las colimnas
-        :param desviacion: Lista de desviaciones estandar de las columnas
-        :param archivoFiltrado: Ruta del archivo fuente
-        :param archivoNormalizadoZScore: Ruta donde se guarda el archivo de estandarizacion
+        : promedio (list): Lista de medias de las columnas
+        : desviacion (list): Lista de desviaciones estandar de las columnas
+        : archivoFiltrado (str): Ruta del archivo fuente
+        : archivoNormalizadoZScore (str): Ruta donde se guarda el archivo de estandarizacion
 
     Returns:
         None: se escriben directamente en el archivo de salida
