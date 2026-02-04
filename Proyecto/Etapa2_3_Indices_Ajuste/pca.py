@@ -6,6 +6,7 @@ def calcular_media(X):
     return np.mean(X, axis=0)
 
 def calcular_vector_propio(Xcentrado):
+    
     covarianza = np.dot(Xcentrado.T, Xcentrado) / (X.shape[0] - 1) 
     autovalores, autovectores = np.linalg.eig(covarianza)
 

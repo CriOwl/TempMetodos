@@ -4,7 +4,10 @@ import Proyecto.Etapa1Normalizacion.normalizacion as nor
 import Proyecto.Etapa2_3_Indices_Ajuste.coeficientePearson as pears
 import Proyecto.Etapa2_3_Indices_Ajuste.pca as pca
 import Proyecto.Etapa2_3_Indices_Ajuste.regresionMultivaraible as rm
-
+import json
+pathArchivoEntrenamiento = "Archivos/train-metadata.csv"
+pathArchivoPrueba = "Archivos/test-metadata.csv"
+pathArchivoEntrenado = "Archivos/diccionario_entrenamiento.json"
 def entrenar(archivoEntrenamiento):
     """ 
     Ejecuta el flujo completo de entrenamiento del modelo para la deteccion de melanoma
@@ -63,7 +66,8 @@ def entrenar(archivoEntrenamiento):
         "Diametro": {"vectorPropio": vector_Propio_Diametro, "media": media_Diametro},
         "coeficientes": {"terminoIndependiente": coeficientes[0], "Asimetria": coeficientes[1], "Borde": coeficientes[2], "Color": coeficientes[3], "Diametro": coeficientes[4]}
     }
-
+    with open(pathArchivoEntrenado, "w", encoding="utf-8") as f:
+        json.dump(diccionarioEntrenamiento, f, indent=4, default=lambda x: x.tolist())
     return diccionarioEntrenamiento
     # Guardar el diccionario de entrenamiento en un Json y eso en un archivo pero antes guardar el umbral con la funcion obtener Y
 entrenar("Archivos/train-metadata.csv")
@@ -114,7 +118,6 @@ def obtenerY(diccionarioEntrenamiento,archivoDatos):
        )
        y_estimado.append(y)
 
-return y_estimado
 
 diccionario = entrenar("Archivos/train-metadata.csv")
 print(obtenerY(diccionario, "Archivos/test-metadata.csv"))
