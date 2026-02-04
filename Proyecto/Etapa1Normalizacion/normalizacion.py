@@ -128,7 +128,8 @@ def zscore(promedio, desviacion, archivoFiltrado, archivoNormalizadoZScore):
     """
         Aplica la normalizacion zscore a los datos del archivo
 
-        la formula aplicada es z = (x - media) / desviacion. La columna target se mantiene sin cambios para no afectar la clasificacion binaria
+        la formula aplicada es z = (x - media) / desviacion. La columna target 
+        se mantiene sin cambios para no afectar la clasificacion binaria
 
     Args:
         : promedio (list): Lista de medias de las columnas

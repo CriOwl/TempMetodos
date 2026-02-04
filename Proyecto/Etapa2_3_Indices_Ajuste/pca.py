@@ -3,10 +3,23 @@ import math
 from . import coeficientePearson as cp
 
 def calcular_media(X):
+    """
+    Docstring for calcular_media
+    Calcula el vector de media aritmetica para un conjunto de datos multidimensional.
+    :param X: Matriz de datos de entrada.
+    """
     return np.mean(X, axis=0)
 
 def calcular_vector_propio(Xcentrado,X):
-    
+    """
+    Docstring for calcular_vector_propio
+    Calculamos el vector propio principal de la matriz de covarianza
+    El proceso incluye el calculo de la matriz de covarianza, 
+    la optencion de autovalores y autovectores.
+
+    :param Xcentrado: Matriz de datos tras haber restado la media
+    :param X: Matriz de datos orginal utilizada para obtener las dimesiones del set de datos.
+    """
     covarianza = np.dot(Xcentrado.T, Xcentrado) / (X.shape[0] - 1) 
     autovalores, autovectores = np.linalg.eig(covarianza)
 

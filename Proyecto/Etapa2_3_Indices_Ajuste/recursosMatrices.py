@@ -28,7 +28,8 @@ def multiplicar_matrices(matriz_a, matriz_b):
         matriz (list): matriz B
 
     Returns:
-        matrizResultante: matriz resultante de la multiplicacion de A y B o una matriz vacia si no son compatibles
+        matrizResultante: matriz resultante de la multiplicacion de A y B 
+        o una matriz vacia si no son compatibles
     """
     filas_A = len(matriz_a)
     cols_A = len(matriz_a[0])

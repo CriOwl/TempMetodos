@@ -14,8 +14,10 @@ def entrenar(archivoEntrenamiento):
 
     Este proceso integra todas las etapas del analisis numerico desarrollado:
     1. Preprocesamiento: Calculo de promedio, desviaciones y normalizacion zscore
-    2. Reduccion de dimensionalidad: agrupacion de variables segun el estandar ABCD y aplicacion de PCA para obtener vectores propios u medias de proyecccion.
-    3. Ajuste Numerico: Construccion de la matriz de diseño y resolucion del sistema de ecuaciones mediante minimos cuadrados para hallar los coeficientes beta.
+    2. Reduccion de dimensionalidad: agrupacion de variables segun el estandar ABCD y 
+    aplicacion de PCA para obtener vectores propios u medias de proyecccion.
+    3. Ajuste Numerico: Construccion de la matriz de diseño y resolucion del sistema de e
+    cuaciones mediante minimos cuadrados para hallar los coeficientes beta.
 
     Args:
         archivoEntrenamiento (str): Ruta del archivo CSV con el dataset crudo. 
@@ -74,7 +76,15 @@ entrenar("Archivos/train-metadata.csv")
 
 
 def obtenerY(diccionarioEntrenamiento,archivoDatos):
+    """
+    Docstring for obtenerY
+    Esta funcion aplica el modelo previamente entrenado a nuevos datos, 
+    siguiendo el flujo de normalizacion, proyeccion PCA con vectores propios calculados 
+    y aplicacion de la ecuacion de minimos cuadrados.
 
+    :param diccionarioEntrenamiento: DIccionario que contiene los parametros aprendidos. 
+    :param archivoDatos: Ruta del archivo CSV con los datos a evaluar "testeo"
+    """
     promedios = diccionarioEntrenamiento["promedios"]
     desviaciones = diccionarioEntrenamiento["desviaciones"]
 
