@@ -10,6 +10,19 @@ import math
 diccionarioEntrenamientoPath = "Archivos/diccionario_entrenamiento.json"
 
 def preparar_para_json(obj):
+    """
+    Docstring for preparar_para_json
+    Preparamos estructuras de datos complejas para ser serializadas en un formato JSON
+
+    COnvierte arrays de Numpy a listas y gestionamos valores numericos especiales
+    (Nan o Inf) para evitar errores de codificacion
+
+    :param obj: Objeto a procesar (dict, list, ndarray o float)
+
+    Returns:
+        any: Objeto con tipos de datos naribos de python compatibles con JSON
+    """
+    
     if isinstance(obj, np.ndarray):
         return obj.tolist()
     elif isinstance(obj, float):
@@ -87,7 +100,17 @@ def obtenerY(archivoDatos):
 
 def optimizar_umbral_desde_scores(y_scores,target,n_puntos=1000,w_sens=1.00,w_spec=1.00):
     """
+    Docstring for optimizar_umbral_desde_scores
+    Calcula el umbral de decision optimo mediante una busqueda en rejilla 
 
+    Itera sobre un rango de psobiles umbrales para maximizar una puntuacion ponderada
+    Entre sensibilidad y especificidad, priorizando la deteccion clinica. 
+
+    :param y_scores: Puntuaciones continuas generadas por el modelo
+    :param target: Etiquetas reales de diagnostico 0 o 1
+    :param n_puntos: Densidad de la busqueda en el rango de scores
+    :param w_sens: Peso de importancia para sensibilidad clinica
+    :param w_spec: Peso de importancia para la especificidad
     """
     scores = np.asarray(y_scores, dtype=float)
     y_true = np.asarray(target, dtype=int)
