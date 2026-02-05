@@ -195,7 +195,7 @@ def entrenar(archivoEntrenamiento):
         json.dump(diccionarioEntrenamiento, f, indent=4)
     
 
-test = entrenar("Archivos/train-metadata.csv")
+
 
 
 def evaluarConUmbral(ruta_csv,ruta_json = "Archivos/diccionario_entrenamiento.json" ):
@@ -240,5 +240,5 @@ def evaluarConUmbral(ruta_csv,ruta_json = "Archivos/diccionario_entrenamiento.js
         print(f"Especificidad: {especificidad}")
         print(f"Precision: {precision}")
 
-
+entrenar("Archivos/train-metadata.csv")
 evaluarConUmbral("Archivos/train-metadata.csv")
