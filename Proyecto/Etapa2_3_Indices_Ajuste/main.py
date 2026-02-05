@@ -188,7 +188,7 @@ def entrenar(archivoEntrenamiento):
     with open(diccionarioEntrenamientoPath, "w", encoding="utf-8") as f:
         json.dump(diccionarioEntrenamiento, f, indent=4)
     valoresY=obtenerY(archivoEntrenamiento)
-    umbral=optimizar_umbral_desde_scores(valoresY,columnasDatos[0],n_puntos=100000,w_sens=1.93,w_spec=1.00)
+    umbral=optimizar_umbral_desde_scores(valoresY,columnasDatos[0],n_puntos=100000,w_sens=2.00,w_spec=1.00)
     diccionarioEntrenamiento["umbral"] = umbral
     diccionarioEntrenamiento = preparar_para_json(diccionarioEntrenamiento)
     with open(diccionarioEntrenamientoPath, "w", encoding="utf-8") as f:
