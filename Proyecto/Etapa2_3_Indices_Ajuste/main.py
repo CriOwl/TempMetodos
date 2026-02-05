@@ -50,9 +50,9 @@ def obtenerY(archivoDatos):
     matrizColor=[]
     matrizDiametro=[]
     for i in range(len(columnasDatos[0])):
-        matrizAsimetria.append([columnasDatos[2][i],columnasDatos[3][i]])
+        matrizAsimetria.append([columnasDatos[2][i],columnasDatos[9][i]])
         matrizBorde.append([columnasDatos[3][i],columnasDatos[7][i]])
-        matrizColor.append([columnasDatos[4][i],columnasDatos[5][i],columnasDatos[8][i],columnasDatos[9][i]])
+        matrizColor.append([columnasDatos[4][i],columnasDatos[5][i],columnasDatos[8][i],columnasDatos[10][i]])
         matrizDiametro.append([columnasDatos[1][i], columnasDatos [6][i]])
     indiceAsimetria = []
     vectorPropio_Asimetria = diccionarioEntrenamiento["Asimetria"]["vectorPropio"]
@@ -85,7 +85,7 @@ def obtenerY(archivoDatos):
         y_estimado.append(y)
     return y_estimado
 
-def optimizar_umbral_desde_scores(y_scores,target,n_puntos=100,w_sens=1.50,w_spec=1.00):
+def optimizar_umbral_desde_scores(y_scores,target,n_puntos=1000,w_sens=1.00,w_spec=1.00):
     """
 
     """
@@ -152,15 +152,19 @@ def entrenar(archivoEntrenamiento):
     desviaciones = nor.desviacionxColumna(promedios, archivoFiltrado)
     nor.zscore(promedios, desviaciones, archivoFiltrado, archivoNormalizado)
     columnasDatos,encabezado= pears.obtenerColunmas(archivoNormalizado)
-    matrizAsimetria=[columnasDatos[2],columnasDatos[3]]
+    matrizAsimetria=[columnasDatos[2],columnasDatos[9]]
     matrizBorde=[columnasDatos[3],columnasDatos[7]]
-    matrizColor=[columnasDatos[4],columnasDatos[5],columnasDatos[8],columnasDatos[9]]
+    matrizColor=[columnasDatos[4],columnasDatos[5],columnasDatos[8],columnasDatos[10]]
     matrizDiametro=[columnasDatos[1], columnasDatos [6]]
     _,_,vector_Propio_Asimetria,indicePCA_Asimetria,media_Asimetria=pca.PCA(matrizAsimetria)
     _,_,vector_Propio_Borde,indicePCA_Borde,media_Borde=pca.PCA(matrizBorde)
     _,_,vector_Propio_Color,indicePCA_Color,media_Color=pca.PCA(matrizColor)
     _,_,vector_Propio_Diametro,indicePCA_Diametro,media_Diametro=pca.PCA(matrizDiametro)
     matrizTemp=[]
+    print(f"Vector propio de Asimetria: {encabezado[2]},{encabezado[9]} {vector_Propio_Asimetria}")
+    print(f"Vector propio de Borde: {encabezado[3]},{encabezado[7]} {vector_Propio_Borde}")
+    print(f"Vector propio de Color: {encabezado[4]},{encabezado[5]},{encabezado[8]},{encabezado[10]} {vector_Propio_Color}")
+    print(f"Vector propio de Diametro: {encabezado[1]},{encabezado[6]} {vector_Propio_Diametro}")
     for i in range(len(columnasDatos[0])):
         fila = [
             indicePCA_Asimetria[i],

@@ -20,10 +20,10 @@ def filtrado(archivoCrudo, archivoFiltrado):
         with open(archivoCrudo, "r", encoding="utf-8", newline="") as archivo:
             reader = csv.reader(archivo)
             header = next(reader)
-            listadoFiltrado.append([header[1], header[6], header[19], header[20], header[21], header[26], header[30], header[32], header[33], header[35]]) 
+            listadoFiltrado.append([header[1], header[6], header[19], header[20], header[21], header[26], header[30], header[32], header[33],header[34], header[35]]) 
             for row in reader:
-                if row[1] != "" and row[6] != "" and row[19] != "" and row[20] != "" and row[21] != "" and row[26] != "" and row[30] != "" and row[32] != "" and row[33] != "" and row[35] != "" and row[8].__contains__("3D: XP"):
-                    listadoFiltrado.append([row[1], row[6], row[19], row[20], row[21], row[26], row[30], row[32], row[33], row[35]])
+                if row[1] != "" and row[6] != "" and row[19] != "" and row[20] != "" and row[21] != "" and row[26] != "" and row[30] != "" and row[32] != "" and row[33] != "" and row[34] != "" and row[35] != "" and row[8].__contains__("3D: XP"):
+                    listadoFiltrado.append([row[1], row[6], row[19], row[20], row[21], row[26], row[30], row[32], row[33],row[34],row[35]])
         with open(archivoFiltrado, "w", encoding="utf-8", newline="") as archivoE:
             writer = csv.writer(archivoE)
             for row in listadoFiltrado:
