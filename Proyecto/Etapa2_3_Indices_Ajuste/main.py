@@ -7,6 +7,8 @@ import Proyecto.Etapa2_3_Indices_Ajuste.minimosCuadrados as rm
 import json
 import numpy as np
 import math
+import time
+
 diccionarioEntrenamientoPath = "Archivos/diccionario_entrenamiento.json"
 
 def preparar_para_json(obj):
@@ -211,7 +213,7 @@ def entrenar(archivoEntrenamiento):
     with open(diccionarioEntrenamientoPath, "w", encoding="utf-8") as f:
         json.dump(diccionarioEntrenamiento, f, indent=4)
     valoresY=obtenerY(archivoEntrenamiento)
-    umbral=optimizar_umbral_desde_scores(valoresY,columnasDatos[0],n_puntos=100000,w_sens=2.00,w_spec=1.00)
+    umbral=optimizar_umbral_desde_scores(valoresY,columnasDatos[0],n_puntos=1000,w_sens=2.00,w_spec=1.00)
     diccionarioEntrenamiento["umbral"] = umbral
     diccionarioEntrenamiento = preparar_para_json(diccionarioEntrenamiento)
     with open(diccionarioEntrenamientoPath, "w", encoding="utf-8") as f:
@@ -261,7 +263,19 @@ def evaluarConUmbral(ruta_csv,ruta_json = "Archivos/diccionario_entrenamiento.js
         print(f"Lunares marcados como cancer (FP): {fp}")
         print(f"Sensibilidad: {sensibilidad}")
         print(f"Especificidad: {especificidad}")
-        print(f"Precision: {precision}")
 
-entrenar("Archivos/train-metadata.csv")
-evaluarConUmbral("Archivos/train-metadata.csv")
+
+
+inicioEntrenamiento = time.perf_counter()
+entrenar("Archivos/Train.csv")
+finEntrenamiento = time.perf_counter()
+
+
+inicioTest = time.perf_counter()
+evaluarConUmbral("Archivos/Testeo.csv")
+finTest = time.perf_counter()
+
+
+print("Tiempos de ejecucion: ")
+print(f"Tiempo de entrenamiento: {finEntrenamiento - inicioEntrenamiento} segundos")
+print(f"Tiempo de testeo: {finTest - inicioTest} segundos")
